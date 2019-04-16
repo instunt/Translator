@@ -1,0 +1,145 @@
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Translator</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>    
+	</head>
+	<body class="">
+    <header>
+    </header>
+    {% if user.is_authenticated %}   
+             
+    <div class="container-fluid content">
+      <div class="row">  
+        <a href="{% url 'logout' %}" class="top-menu btn btn-md pravy btn-danger">Odhlasit sa</a><br><br>
+      <div>  
+
+            <br><br>
+            {% for it in texty %}
+              <div class="row">   
+                <div class="formular">
+                   <form method="POST">{% csrf_token %}
+                      <div class="row"> 
+                      <input id="Textid" type="hidden" name="Textid" value="{{ it.id }}">
+                        <div class="fieldWrapper col-md-3 col-sm-4">                                             
+                          <label for="nazov">Nazov: </label>
+                          <input id="nazovTextu" type="text" name="nazovTextu" value="{{ it.nazovTextu }}">
+                        <br>
+                        
+                          <label for="kapitola">Kapitola: </label>
+                          <input id="kapitola" type="text" name="kapitola" value="{{ it.kapitola }}">
+                        <br>
+                        
+                          <label for="strana">Strana: </label>
+                          <input id="strana" type="text" name="strana" value="{{ it.strana }}">
+                        <br>          
+                        
+                          <label for="riadok">Riadok: </label>
+                          <input id="riadok" type="text" name="riadok" value="{{ it.riadok }}"><br><br>                    
+                          
+                          <button type="submit" class="save btn btn-primary btn-sm">Ulozit</button>&nbsp;   
+                          <button type="submit" class="save btn btn-danger btn-sm">Vymazat</button>   
+                          
+                          
+                        </div>
+                        <div class="fieldWrapper col-md-4 col-sm-4"> 
+                          <label for="otLanguage">Original jazyk: </label>
+                          <input id="otLanguage" type="text" name="otLanguage" value="{{ it.otLanguage }}">
+                        <br><br>  
+                          <label for="origText">Orig.text: </label><br>
+                          <textarea id="origText" type="text"  size="80" rows=5 cols=60 name="origText" value="{{ it.origText }}">{{ it.origText }} </textarea>
+                        </div>    
+                        <div class="fieldWrapper col-md-4 col-sm-4">
+                          <label for="ttLanguage">Jazyk prekladu: </label>
+                          <input id="ttLanguage" type="text" name="ttLanguage" value="{{ it.ttLanguage }}">
+                          
+                        <br><br>   
+                          <label for="translatedText">Prelozeny text: </label><br>
+                          <textarea id="translatedText" type="text"  size="80" rows=5 cols=60 name="translatedText" value="{{ it.translatedText }}">{{ it.translatedText }} </textarea>
+                          
+                        </div>                                                                                                                                               
+                   </form>
+                   <form method="POST">{% csrf_token %}
+                    <br><br><br> <br><br><br><br>
+                    <input id="Textid" type="hidden" name="Textid" value="{{ it.id }}">  
+                    <input id="delete" type="hidden" name="delete" value="delete">                                                                                                                       
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="save btn btn-danger btn-sm">Vymazat</button>                                         
+                   </form>
+                </div>
+              </div>                                                                                          
+              </div>
+              <hr>
+            {% endfor %}          
+          <div class="row"> 
+            <div class="col-md-12 col-sm-12">   
+              <div class="formular">
+                
+                <h3>Pridat Text</h3><br><br>  
+                  <form method="POST">{% csrf_token %}
+                    {{ form.non_field_errors }}   
+                    
+                    <div class="row">                                     
+                      <div class="fieldWrapper col-md-3 col-sm-4">
+                        {{ form.nazovTextu.errors }}
+                        <label for="{{ form.nazov.id_for_label }}">Nazov:</label><br>
+                        {{ form.nazovTextu }}
+                      <br>  
+                        {{ form.kapitola.errors }}
+                        <label for="{{ form.kapitola.id_for_label }}">Kapitola:</label><br>
+                        {{ form.kapitola }}
+
+                      <br>  
+                        {{ form.strana.errors }}
+                        <label for="{{ form.strana.id_for_label }}">Strana:</label><br>
+                        {{ form.strana }}          
+                      <br>                        
+
+                        {{ form.riadok.errors }}
+                        <label for="{{ form.riadok.id_for_label }}">Riadok:</label><br>
+                        {{ form.riadok }}
+                      </div>
+                      
+                      <div class="fieldWrapper col-md-4 col-sm-4">
+                        {{ form.otLanguage.errors }}
+                        <label for="{{ form.otl.id_for_label }}">Jazyk originalu:</label><br>
+                        {{ form.otLanguage }}
+                      <br>                                                                                                  
+                        {{ form.origText.errors }}
+                        <label for="{{ form.origText.id_for_label }}">Text original:</label><br>
+                        {{ form.origText }}
+                      </div>                                
+                      <div class="col-md-4 col-sm-4">
+                        {{ form.ttLanguage.errors }}
+                        <label for="{{ form.ttl.id_for_label }}">Jazyk prekladu:</label><br>
+                        {{ form.ttLanguage }} 
+                        {{ form.translatedText.errors }}
+                        <label for="{{ form.translated.id_for_label }}">Prelozeny text:</label><br>
+                        {{ form.translatedText }}
+                      </div>                       
+                      <div class="fieldWrapper col-md-1 col-sm-1">                                                                                                   
+                          <button type="submit" class="save btn btn-primary">Ulozit</button>
+                      </div>                                                               
+                    </div>                                           
+                  </form>
+              </div>     
+          
+            </div>  
+          </div>  
+       </div>
+     </div>      
+    {% else %}
+    <h1>Prihlasit sa</h1><br>
+             
+    <a href="{% url 'login' %}" class="top-menu"></a>
+    {% endif %}    
+    
+	</body>
+</html>
